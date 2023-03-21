@@ -2,7 +2,7 @@
 using System.Net;
 using System.Net.Sockets;
 
-namespace Client
+namespace Server
 {
     class Program
     {
@@ -10,20 +10,24 @@ namespace Client
         {
             Console.Title = "TCP Server";
 
-            var localIP = IPAddress.Any;
-            var localPort = 1308;
+            //Thiết lập IPEndpoint
+            var localIP = IPAddress.Any; //Chấp nhận tất cả địa chỉ IPAddress
+            var localPort = 1308; // Nghe tất cả các gói tin gửi qua cổng 1308
             var localEndPoint = new IPEndPoint(localIP, localPort);
 
-            var listener = new Socket(SocketType.Stream, ProtocolType.Tcp);
-            listener.Bind(localEndPoint);
-            listener.Listen(10);
+            var listener = new Socket(SocketType.Stream, ProtocolType.Tcp); //Gửi dữ liệu theo giao thức TCP, loại Socket Stream
+            listener.Bind(localEndPoint); //Kết nối Socket và EndPoint
+            listener.Listen(10); //Lắng nghe từ Client, tối đa 10 request mỗi lần
             Console.WriteLine($"Local socket bind to {localEndPoint}. Waitting for request ....");
 
             while (true)
             {
-                var worker = listener.Accept();
-                var stream = new NetworkStream(worker);
-                var reader = new StreamReader(stream);
+            //Chấp nhận kết nối từ Client
+                var socket = listener.Accept();
+                Console.WriteLine($"Accepted connection from {socket.RemoteEndPoint}");
+
+                var stream = new NetworkStream(socket); //Nhận dữ liệu từ Client
+                var reader = new StreamReader(stream);//Đọc chuỗi truy vấn
                 var writer = new StreamWriter(stream) { AutoFlush = true};
 
                 var request = reader.ReadLine();
@@ -38,7 +42,7 @@ namespace Client
                     default: response = "UNKNOWN"; break;
                 }
                 writer.WriteLine(response);
-                worker.Close();
+                socket.Close();
             }
 
         }
