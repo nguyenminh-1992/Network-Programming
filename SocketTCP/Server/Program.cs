@@ -39,13 +39,12 @@ namespace Server
 
             //Nhận dữ liệu từ Client
                 var length = socket.Receive( receiveBuffer );
-                socket.Shutdown(SocketShutdown.Receive);
                 var text = Encoding.ASCII.GetString( receiveBuffer ,0,length);
                 Console.WriteLine($"Received from Client: {text}");
                 socket.Shutdown(SocketShutdown.Receive); //Đóng kết nối, không nhận dữ liệu nữa
 
-            //Chuyển dữ liệu sang chữ in hoa và gửi lại Client
-                var result = text.ToUpper();    
+                //Chuyển dữ liệu sang chữ in hoa và gửi lại Client
+                var result = text.ToUpper();  
                 var sendBuffer = Encoding.ASCII.GetBytes(result);
                 socket.Send(sendBuffer);
                 Console.WriteLine($"Send to Client: {result}");

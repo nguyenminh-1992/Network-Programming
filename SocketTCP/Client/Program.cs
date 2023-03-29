@@ -42,7 +42,7 @@ namespace Client
                 Console.Write(" #Text >>> ");
                 Console.ResetColor();
                 var text = Console.ReadLine();
-
+                 
                 var sendBuffer = Encoding.ASCII.GetBytes(text);
                 socket.Send(sendBuffer);
                 socket.Shutdown(SocketShutdown.Send); //Đóng kết nối, không gửi dữ liệu nữa 
