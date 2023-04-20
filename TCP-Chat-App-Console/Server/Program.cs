@@ -19,7 +19,7 @@ namespace Server
             IPEndPoint clientep = (IPEndPoint)client.RemoteEndPoint;
             Console.WriteLine("Connected with {0} at port {1}", clientep.Address, clientep.Port);
             string welcome = "Welcome to my test server";
-            data = Encoding.UTF8.GetBytes(welcome);
+            var data = Encoding.UTF8.GetBytes(welcome);
             client.Send(data, data.Length, SocketFlags.None);
             string input;
             while (true)
